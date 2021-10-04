@@ -1,38 +1,52 @@
 game();
 
 function game(){
-    //declare playerSelection & computerSelection variables
-    let outcome;
+    const buttons = document.querySelectorAll('button');
+    const body = document.querySelector('body');
+    const div = document.createElement('div');
+    const divStand = document.createElement('div');
+    const divWinner = document.createElement('div');
     let playerWins = 0;
     let computerWins = 0;
-    let i = 1;
-    while (i <= 5){
-        let playerSelection = prompt("Pick one: 'Rock', 'Paper' or 'Scissors'");
-        console.log("Round " + i + ":")
-        console.log("You play: " + playerSelection.toLowerCase() + ".")
-        const computerSelection = computerPlay();
-        console.log("Computer plays: " + computerSelection.toLowerCase() + ".")
-        outcome = playRound(playerSelection, computerSelection);
-        if (outcome == "win"){
-            console.log("You win! " + playerSelection.slice(0,1).toUpperCase() + playerSelection.slice(1).toLowerCase() + " beats " + computerSelection.toLowerCase() + ".")
-            playerWins++;
-        }
-        else if (outcome == "lose"){
-            console.log("You lose! " + computerSelection.slice(0,1).toUpperCase() + computerSelection.slice(1).toLowerCase() + " does not beat " + playerSelection.toLowerCase() + ".")
-            computerWins++;
-        }
-        else if (outcome == "draw"){
-            console.log("Nobody wins! " + playerSelection.slice(0,1).toUpperCase() + playerSelection.slice(1).toLowerCase() + " does not beat " + computerSelection.toLowerCase() + " or vice versa. Please play this round again.")
-            i--;
-        }
-        i++;
-    }
-    console.log("You won " + playerWins + " times.")
-    console.log("Computer won " + computerWins + " times.")
-    if(playerWins > computerWins){
-        console.log("You won!")
-    }
-    else console.log("You lose!")
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const computerSelection = computerPlay();
+            const playerSelection = button.textContent;
+            divWinner.textContent = ""
+            body.appendChild(divWinner);
+            console.log("You play: " + playerSelection.toLowerCase() + ".")
+            console.log("Computer plays: " + computerSelection.toLowerCase() + ".")
+            outcome = playRound(playerSelection,computerSelection);
+            if (outcome == "win"){
+                div.textContent = "You win! " + playerSelection.slice(0,1).toUpperCase() + playerSelection.slice(1).toLowerCase() + " beats " + computerSelection.toLowerCase() + "."
+                playerWins++;
+            }
+            else if (outcome == "lose"){
+                div.textContent = "You lose! " + playerSelection.slice(0,1).toUpperCase() + playerSelection.slice(1).toLowerCase() + " does not beat " + computerSelection.toLowerCase() + "."
+                computerWins++;
+            }
+            else if (outcome == "draw"){
+                div.textContent = "Nobody wins! " + playerSelection.slice(0,1).toUpperCase() + playerSelection.slice(1).toLowerCase() + " does not beat " + computerSelection.toLowerCase() + " or vice versa. Please play this round again."
+            }
+            divStand.textContent = "You won " + playerWins + " times, while the computer won " + computerWins + " times."
+            body.appendChild(div);
+            body.appendChild(divStand);
+            if (playerWins === 5) {
+                divWinner.textContent = "You win! Click on a button to start again."
+                body.appendChild(divWinner);
+                playerWins = 0;
+                computerWins = 0;
+            }
+            else if (computerWins === 5) {
+                divWinner.textContent = "You lose! Click on a button to start again."
+                body.appendChild(divWinner);
+                playerWins = 0;
+                computerWins = 0;
+            }   
+        });
+    });
+    
+
 }
         
 
@@ -60,4 +74,3 @@ function playRound(playerSelection, computerSelection){
     }
     else return "draw"
 }
-
